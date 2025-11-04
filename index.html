@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeDynasty - Investment Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Language Toggle and Calculator Button - UPDATED */
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .toggle-btn {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .calculator-btn, .manager-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .toggle-btn:hover, .calculator-btn:hover, .manager-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Header - UPDATED with bigger size and shadow */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 3.5rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+        
+        /* TradingView Widget */
+        .tradingview-widget-container {
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+        
+        .tradingview-widget-container a {
+            pointer-events: none;
+        }
+        
+        /* Sections */
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        
+        /* Registration Form */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        
+        /* Investment Options */
+        .investment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .option-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: transform 0.3s;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .serial-no {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        /* Jio Hotstar Style Animation - UPDATED with faster bubbles */
+        #animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .animation-logo {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12, #3498db, #2ecc71, #9b59b6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 50px rgba(231, 76, 60, 0.7);
+            animation: pulse 1.5s infinite alternate;
+        }
+        
+        .animation-logo-inner {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .animation-text {
+            color: white;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            animation: textGlow 1.5s infinite alternate;
+        }
+        
+        .animation-subtext {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+            border-radius: 3px;
+            animation: loading 3s linear forwards;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 5s infinite linear; /* Faster animation */
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(231, 76, 60, 0.7);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 0 60px rgba(231, 76, 60, 0.9);
+            }
+        }
+        
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(231, 76, 60, 0.7);
+            }
+        }
+        
+        @keyframes loading {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* View Summary Button */
+        .summary-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        .summary-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Modal */
+        .calculator-modal, .manager-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .calculator-content, .manager-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .calculator-header, .manager-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .calculator-title, .manager-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .close-calculator, .close-manager {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .close-calculator:hover, .close-manager:hover {
+            color: #e74c3c;
+        }
+        
+        .calculator-form {
+            margin-bottom: 20px;
+        }
+        
+        .calculator-result {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .summary-table th, .summary-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .summary-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        /* Manager Actions */
+        .manager-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .manager-btn-action {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        
+        .manager-btn-action:hover {
+            background-color: #2980b9;
+        }
+        
+        .manager-btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .manager-btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .password-form {
+            margin-bottom: 20px;
+        }
+        
+        /* Withdrawal Section */
+        .withdrawal-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .account-details {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .transaction-table th, .transaction-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .transaction-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .debit {
+            color: #e74c3c;
+        }
+        
+        .credit {
+            color: #27ae60;
+        }
+        
+        .account-list {
+            margin-top: 20px;
+        }
+        
+        .account-item {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .view-account-btn {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .view-account-btn:hover {
+            background-color: #8e44ad;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+        }
+        
+        .contact-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        /* Manager Summary */
+        .manager-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Delete Button */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Withdrawal Button */
+        .withdrawal-btn {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+        
+        .withdrawal-btn:hover {
+            background-color: #d68910;
+        }
+        
+        /* Summary Total */
+        .summary-total {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+        
+        /* Live Market Section Styles - NEW ADDITION */
+        .live-market-section {
+            background-color: #0d1117;
+            color: white;
+            border-radius: 10px;
+            padding: 0;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .live-market-header {
+            background: #161b22;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.3em;
+            color: #00c3ff;
+            font-weight: bold;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .live-market-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: #161b22;
+            padding: 12px;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .live-market-tab {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+        }
+        
+        .live-market-tab.active {
+            background: #00c3ff;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .live-market-list {
+            display: none;
+            background: #0d1117;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+            gap: 8px;
+        }
+        
+        .live-market-item {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .live-market-item:hover {
+            background: #00c3ff;
+            color: #000;
+        }
+        
+        .live-chart-container {
+            width: 100%;
+            height: 500px;
+        }
+        
+        .live-chart-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            .animation-logo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .animation-logo-inner {
+                width: 90px;
+                height: 90px;
+                font-size: 2rem;
+            }
+            
+            .animation-text {
+                font-size: 2rem;
+            }
+            
+            .animation-subtext {
+                font-size: 1rem;
+            }
+            
+            .loading-bar {
+                width: 250px;
+            }
+            
+            .investment-options {
+                flex-direction: column;
+            }
+            
+            .option-card {
+                min-width: 100%;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+            
+            .top-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .calculator-btn, .manager-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .contact-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .serial-no {
+                width: 40px;
+                font-size: 0.8rem;
+            }
+            
+            .manager-summary {
+                flex-direction: column;
+            }
+            
+            .summary-card {
+                min-width: 100%;
+            }
+            
+            .live-chart-container {
+                height: 400px;
+            }
+            
+            .live-market-tabs {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .live-market-tab {
+                font-size: 0.8rem;
+                padding: 6px 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            table {
+                font-size: 0.75rem;
+            }
+            
+            th, td {
+                padding: 6px 8px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .serial-no {
+                width: 30px;
+                font-size: 0.7rem;
+            }
+            
+            .live-chart-container {
+                height: 300px;
+            }
+            
+            .live-market-item {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animation Container -->
+    <div id="animation-container">
+        <div class="floating-shapes-container">
+            <!-- Floating shapes will be added by JavaScript -->
+        </div>
+        <div class="animation-logo">
+            <div class="animation-logo-inner">TD</div>
+        </div>
+        <div class="animation-text">TradeDynasty</div>
+        <div class="animation-subtext">Your Gateway to Smart Investments</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Main Content (hidden initially) -->
+    <div id="main-content" style="display: none;">
+        <div class="container">
+            <!-- Language Toggle and Calculator Button - TOP LINE -->
+            <div class="top-controls">
+                <button class="toggle-btn" id="language-toggle">Switch to हिंदी</button>
+                <div class="control-buttons">
+                    <button class="calculator-btn" id="calculator-btn">📊 Calculator</button>
+                    <button class="manager-btn" id="manager-btn">⚙️ Manager</button>
+                </div>
+            </div>
+            
+            <!-- Header - CENTERED WITH SHADOW -->
+            <div class="header">
+                <h1>TradeDynasty</h1>
+            </div>
+            
+            <!-- 🔥 Crypto Market Widget by TradingView - NO CLICKABLE LINKS -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                    "symbols": [
+                        { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
+                        { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
+                        { "proName": "BINANCE:BNBUSDT", "title": "BNB" },
+                        { "proName": "BINANCE:SOLUSDT", "title": "Solana" },
+                        { "proName": "BINANCE:DOGEUSDT", "title": "Dogecoin" }
+                    ],
+                    "showSymbolLogo": true,
+                    "colorTheme": "dark",
+                    "isTransparent": false,
+                    "displayMode": "adaptive",
+                    "locale": "en"
+                }
+                </script>
+            </div>
+            
+            <!-- Live Market Section - NEW ADDITION -->
+            <div class="live-market-section">
+                <div class="live-market-header">📊 TradeDynasty Live Market</div>
+                
+                <div class="live-market-tabs">
+                    <div class="live-market-tab active" data-tab="forex">Forex</div>
+                    <div class="live-market-tab" data-tab="crypto">Crypto</div>
+                    <div class="live-market-tab" data-tab="index">Index</div>
+                    <div class="live-market-tab" data-tab="commodities">Commodities</div>
+                </div>
+                
+                <div id="forex" class="live-market-list" style="display:flex;">
+                    <div class="live-market-item" data-symbol="FX:EURUSD">EUR/USD</div>
+                    <div class="live-market-item" data-symbol="FX:GBPUSD">GBP/USD</div>
+                    <div class="live-market-item" data-symbol="FX:USDJPY">USD/JPY</div>
+                    <div class="live-market-item" data-symbol="FX:AUDUSD">AUD/USD</div>
+                    <div class="live-market-item" data-symbol="FX:USDCHF">USD/CHF</div>
+                </div>
+                
+                <div id="crypto" class="live-market-list">
+                    <div class="live-market-item" data-symbol="BINANCE:BTCUSDT">BTC/USDT</div>
+                    <div class="live-market-item" data-symbol="BINANCE:ETHUSDT">ETH/USDT</div>
+                    <div class="live-market-item" data-symbol="BINANCE:BNBUSDT">BNB/USDT</div>
+                    <div class="live-market-item" data-symbol="BINANCE:SOLUSDT">SOL/USDT</div>
+                    <div class="live-market-item" data-symbol="BINANCE:XRPUSDT">XRP/USDT</div>
+                </div>
+                
+                <div id="index" class="live-market-list">
+                    <div class="live-market-item" data-symbol="FOREXCOM:SPXUSD">S&P 500</div>
+                    <div class="live-market-item" data-symbol="FOREXCOM:NSXUSD">NASDAQ 100</div>
+                    <div class="live-market-item" data-symbol="FOREXCOM:DJI">Dow Jones</div>
+                    <div class="live-market-item" data-symbol="OANDA:DE30EUR">DAX (Germany)</div>
+                    <div class="live-market-item" data-symbol="OANDA:UK100GBP">FTSE 100</div>
+                </div>
+                
+                <div id="commodities" class="live-market-list">
+                    <div class="live-market-item" data-symbol="OANDA:XAUUSD">Gold</div>
+                    <div class="live-market-item" data-symbol="OANDA:XAGUSD">Silver</div>
+                    <div class="live-market-item" data-symbol="NYMEX:CL1!">Crude Oil</div>
+                    <div class="live-market-item" data-symbol="NYMEX:NG1!">Natural Gas</div>
+                    <div class="live-market-item" data-symbol="OANDA:BCOUSD">Brent Oil</div>
+                </div>
+                
+                <div class="live-chart-container">
+                    <iframe id="chartFrame" class="live-chart-iframe"
+                        src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=FX:EURUSD&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=0D1117&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1&show_popup_button=1"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            
+            <!-- Objective Section -->
+            <div class="section">
+                <h2 class="section-title" id="objective-title">🎯 Objective</h2>
+                <p id="objective-text">Your investment will return with profit in just 65 days — meaning your amount will double (investment + profit). This is a trading-based platform that operates with complete transparency.</p>
+            </div>
+            
+            <!-- Registration Form -->
+            <div class="section">
+                <h2 class="section-title" id="registration-title">📝 Registration Form</h2>
+                <form id="registration-form">
+                    <div class="form-group">
+                        <label for="reg-id" id="reg-id-label">Registration ID:</label>
+                        <input type="text" id="reg-id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" id="name-label">Name:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="district" id="district-label">District:</label>
+                        <input type="text" id="district" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state" id="state-label">State:</label>
+                        <input type="text" id="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile" id="mobile-label">Mobile Number:</label>
+                        <input type="tel" id="mobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date" id="date-label">Investment Date:</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount" id="amount-label">Investment Amount ($):</label>
+                        <input type="number" id="amount" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="balance" id="balance-label">Balance:</label>
+                        <input type="text" id="balance" readonly>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submit-btn">Add Investment</button>
+                </form>
+                
+                <button class="summary-btn" id="view-summary">View Investment Summary</button>
+            </div>
+            
+            <!-- Rest of the content remains the same -->
+            <!-- Investment Options -->
+            <div class="section">
+                <h2 class="section-title" id="investment-title">💵 Investment Options</h2>
+                <p id="investment-text">You can choose any option for investment —</p>
+                <div class="investment-options">
+                    <div class="option-card">
+                        <h3>1️⃣ $50 Investment</h3>
+                        <p id="option1-text">→ $100 return after 65 days</p>
+                    </div>
+                    <div class="option-card">
+                        <h3>2️⃣ $105 Investment</h3>
+                        <p id="option2-text">→ $210 return after 65 days</p>
+                    </div>
+                    <div class="option-card">
+                        <h3>Other Amount</h3>
+                        <p id="option3-text">→ Double return in 65 days</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Growth Rate -->
+            <div class="section">
+                <h2 class="section-title" id="growth-title">📈 Growth Rate</h2>
+                <p id="growth-text">Daily growth: Approximately 1.072% per day<br>
+                Weekly average return: Approximately 7.75% per week<br>
+                👉 At this rate, the total return becomes approximately 100% in 65 days.</p>
+            </div>
+            
+            <!-- Weekly Progress -->
+            <div class="section">
+                <h2 class="section-title" id="progress-title">📅 Weekly Progress Example</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th id="week-header">Week</th>
+                                <th id="duration-header">Duration (Days)</th>
+                                <th id="return-header">Average Weekly Return</th>
+                                <th id="balance50-header">Balance on $50</th>
+                                <th id="balance105-header">Balance on $105</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progress-table">
+                            <!-- Table rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Final Result -->
+            <div class="section">
+                <h2 class="section-title" id="result-title">🔢 Final Result</h2>
+                <p id="result-text">✅ If you invest $50 → You will receive $100 after 65 days.<br>
+                ✅ If you invest $105 → You will receive $210 after 65 days.</p>
+            </div>
+            
+            <!-- Summary -->
+            <div class="section">
+                <h2 class="section-title" id="summary-title">📊 Summary</h2>
+                <p id="summary-text">This project shows that if you invest only once $50 or $105, and growth happens at an average rate of 1.072% per day, then by the 65th day your amount will be completely doubled. With a steady growth rate of approximately 7.75% every week, your investment will keep increasing continuously.</p>
+            </div>
+            
+            <!-- Disclaimer -->
+            <div class="section">
+                <h2 class="section-title" id="disclaimer-title">⚠️ Important Disclaimer</h2>
+                <p id="disclaimer-text">1️⃣ You can withdraw your money anytime after 48 to 72 hours of investment.<br>
+                2️⃣ Only 100 investors will be included in this project — no new registrations for 65 days.<br>
+                3️⃣ "65 Day Project" is becoming the world's largest and highest returning real trading project.<br>
+                4️⃣ Its purpose is to prove how an experienced trader can earn consistent profit through systematic strategy and technical analysis despite market volatility.<br>
+                5️⃣ The initial 65 days will be a trial phase.</p>
+            </div>
+            
+            <!-- Special Message -->
+            <div class="section">
+                <h2 class="section-title" id="message-title">🌟 Special Message</h2>
+                <p id="message-text">This project is not just an investment — rather it's an opportunity to learn and understand how a professional trader can earn stable profit despite market volatility.</p>
+            </div>
+            
+            <!-- Rules & Conditions -->
+            <div class="section">
+                <h2 class="section-title" id="rules-title">📜 Rules & Conditions</h2>
+                <p id="rules-text">1️⃣ A $2 transaction charge will apply on each withdrawal.<br>
+                2️⃣ You can apply for withdrawal 10 days after investment.</p>
+            </div>
+            
+            <!-- Special Bonus -->
+            <div class="section">
+                <h2 class="section-title" id="bonus-title">🎁 Special Bonus</h2>
+                <p id="bonus-text">If an investor holder completes 20 registrations of $50 or 10 registrations of $100, then they will be given $50 bonus per month as a gift.</p>
+            </div>
+            
+            <!-- Contact -->
+            <div class="section">
+                <h2 class="section-title" id="contact-title">🙏 Yours Truly,</h2>
+                <div class="contact-section">
+                    <div class="contact-info">
+                        <p id="contact-text">Dr. Govind Singh Chandraawat<br>
+                        📲 Mobile/WhatsApp Number: 8269525270<br>
+                        Project Sudarshan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Warning -->
+            <div class="section">
+                <h2 class="section-title" id="warning-title">⚠️ Special Warning:</h2>
+                <p id="warning-text">Investors should consult their financial advisor before making any investment decisions. Invest in trading or cryptocurrency only after their advice.</p>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>TradeDynasty &copy; 2023. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment Calculator Modal -->
+    <div class="calculator-modal" id="calculator-modal">
+        <div class="calculator-content">
+            <div class="calculator-header">
+                <h2 class="calculator-title" id="calculator-title">Investment Calculator</h2>
+                <button class="close-calculator" id="close-calculator">&times;</button>
+            </div>
+            <div class="calculator-form">
+                <div class="form-group">
+                    <label for="calc-amount" id="calc-amount-label">Investment Amount ($):</label>
+                    <input type="number" id="calc-amount" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="calc-date" id="calc-date-label">Investment Date:</label>
+                    <input type="date" id="calc-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="calc-weeks" id="calc-weeks-label">Select Week:</label>
+                    <select id="calc-weeks" required>
+                        <option value="">-- Select Week --</option>
+                        <option value="1">Week 1 (7.75%)</option>
+                        <option value="2">Week 2 (7.75%)</option>
+                        <option value="3">Week 3 (7.75%)</option>
+                        <option value="4">Week 4 (7.75%)</option>
+                        <option value="5">Week 5 (7.75%)</option>
+                        <option value="6">Week 6 (7.75%)</option>
+                        <option value="7">Week 7 (7.75%)</option>
+                        <option value="8">Week 8 (7.75%)</option>
+                        <option value="9">Week 9 (7.75%)</option>
+                        <option value="10">Week 10 (~2.2%)</option>
+                        <option value="65">Full 65 Days (100%)</option>
+                    </select>
+                </div>
+                <button type="button" class="submit-btn" id="calculate-btn">Calculate Profit</button>
+            </div>
+            <div class="calculator-result" id="calculator-result" style="display: none;">
+                <h3 id="result-title">Calculation Result</h3>
+                <div id="result-details"></div>
+                <table class="summary-table" id="summary-table">
+                    <thead>
+                        <tr>
+                            <th id="summary-week">Week</th>
+                            <th id="summary-date">Date</th>
+                            <th id="summary-return">Return</th>
+                            <th id="summary-balance">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Modal -->
+    <div class="manager-modal" id="manager-modal">
+        <div class="manager-content">
+            <div class="manager-header">
+                <h2 class="manager-title" id="manager-title">Manager Dashboard</h2>
+                <button class="close-manager" id="close-manager">&times;</button>
+            </div>
+            <div class="password-form" id="password-form">
+                <div class="form-group">
+                    <label for="manager-password">Enter Password:</label>
+                    <input type="password" id="manager-password" required>
+                </div>
+                <button type="button" class="submit-btn" id="manager-login">Access Manager</button>
+            </div>
+            <div class="manager-actions" id="manager-actions" style="display: none;">
+                <!-- Manager Summary Cards -->
+                <div class="manager-summary" id="manager-summary">
+                    <div class="summary-card">
+                        <h3>Total Investment</h3>
+                        <p id="total-investment">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Profit</h3>
+                        <p id="total-profit">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Balance</h3>
+                        <p id="total-balance">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Withdrawal</h3>
+                        <p id="total-withdrawal">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Registrations</h3>
+                        <p id="total-registrations">0</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdrawal-reg-id">Registration ID for Withdrawal:</label>
+                    <input type="text" id="withdrawal-reg-id" placeholder="Enter Registration ID">
+                </div>
+                <button class="manager-btn-action" id="search-account">Search Account</button>
+                <div id="withdrawal-section" class="withdrawal-section" style="display: none;">
+                    <div class="account-details" id="account-details-manager">
+                        <!-- Account details will be populated by JavaScript -->
+                    </div>
+                    <div class="form-group">
+                        <label for="withdrawal-date">Withdrawal Date:</label>
+                        <input type="date" id="withdrawal-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdrawal-amount">Withdrawal Amount ($):</label>
+                        <input type="number" id="withdrawal-amount" min="1" placeholder="Enter withdrawal amount">
+                    </div>
+                    <button class="manager-btn-action" id="process-withdrawal">Process Withdrawal</button>
+                    <div class="table-container">
+                        <table class="transaction-table" id="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="summary-total" id="transaction-total">
+                        <!-- Transaction totals will be populated by JavaScript -->
+                    </div>
+                    <button class="manager-btn-action" id="export-transaction-excel">📊 Export Transaction Statement</button>
+                </div>
+                <button class="manager-btn-action" id="backup-data">📥 Backup Data</button>
+                <button class="manager-btn-action" id="restore-data">📤 Restore Data</button>
+                <button class="manager-btn-action" id="export-excel">📊 Export to Excel</button>
+                <button class="manager-btn-action manager-btn-danger" id="delete-all">🗑️ Delete All Data</button>
+                
+                <!-- Investment Summary in Manager Dashboard - UPDATED with View Account option -->
+                <div class="withdrawal-section" id="manager-investment-summary" style="margin-top: 20px;">
+                    <h3>Investment Summary</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="serial-no">#</th>
+                                    <th>Registration ID</th>
+                                    <th>Name</th>
+                                    <th>Mobile</th>
+                                    <th>Investment Date</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manager-account-list">
+                                <!-- Account items will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment Summary Modal -->
+    <div class="modal" id="summary-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Investment Summary</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="serial-no">#</th>
+                            <th>Registration ID</th>
+                            <th>Name</th>
+                            <th>District</th>
+                            <th>State</th>
+                            <th>Mobile</th>
+                            <th>Investment Date</th>
+                            <th>Amount</th>
+                            <th>Profit Till Date</th>
+                            <th>Withdrawal</th>
+                            <th>Balance</th>
+                            <th>View Account</th>
+                        </tr>
+                    </thead>
+                    <tbody id="account-list">
+                        <!-- Account items will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Details Modal -->
+    <div class="modal" id="account-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="account-modal-title">Account Details</h2>
+                <button class="close-btn" id="close-account-modal">&times;</button>
+            </div>
+            <div id="account-details">
+                <!-- Account details will be populated by JavaScript -->
+            </div>
+            <div class="table-container" style="margin-top: 20px;">
+                <h3>Transaction History</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="account-transaction-table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="summary-total" id="account-transaction-total">
+                <!-- Transaction totals will be populated by JavaScript -->
+            </div>
+            <button class="summary-btn" id="export-account-statement" style="margin-top: 15px;">Export to Excel</button>
+        </div>
+    </div>
+
+    <script>
+  // Google Apps Script Web App URL - ये आपका नया URL होगा
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZQqd7TzPEEfNWedBIFnBVMadouRxTDU35BHMEm_eGXveMJXTDA0GLFdLBe3nVw72KSQ/exec';
+
+// Initialize registration counter
+let registrationCounter = localStorage.getItem('registrationCounter') || 1;
+
+// Load data from Google Sheets
+async function loadDataFromGoogleSheets() {
+    try {
+        console.log('Loading data from Google Sheets...');
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData&timestamp=${Date.now()}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Google Sheets response:', data);
+        
+        if (data.success) {
+            // Store data in localStorage for offline use
+            localStorage.setItem('accounts', JSON.stringify(data.accounts));
+            
+            // Update registration counter
+            if (data.accounts.length > 0) {
+                registrationCounter = data.accounts.length + 1;
+                localStorage.setItem('registrationCounter', registrationCounter);
+            }
+            
+            console.log('Data loaded from Google Sheets. Count:', data.accounts.length);
+            return true;
+        } else {
+            console.error('Error loading data from Google Sheets:', data.error);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error connecting to Google Sheets:', error);
+        return false;
+    }
+}
+
+// Save data to Google Sheets
+async function saveDataToGoogleSheets(accounts) {
+    try {
+        console.log('Saving data to Google Sheets...', accounts);
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'saveData',
+                accounts: accounts
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Google Sheets save response:', result);
+        
+        if (result.success) {
+            console.log('Data saved to Google Sheets. Count:', result.savedCount);
+            return true;
+        } else {
+            console.error('Error saving data to Google Sheets:', result.error);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error connecting to Google Sheets:', error);
+        return false;
+    }
+}
+
+// Registration form submission
+document.getElementById('registration-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const regId = document.getElementById('reg-id').value;
+    const name = document.getElementById('name').value;
+    const district = document.getElementById('district').value;
+    const state = document.getElementById('state').value;
+    const mobile = document.getElementById('mobile').value;
+    const date = document.getElementById('date').value;
+    const amount = document.getElementById('amount').value;
+    
+    // Basic validation
+    if (!name || !district || !state || !mobile || !date || !amount) {
+        alert('Please fill all required fields');
+        return;
+    }
+    
+    if (amount < 1) {
+        alert('Investment amount must be at least $1');
+        return;
+    }
+    
+    // Save to localStorage first
+    const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+    const existingAccount = accounts.find(acc => acc.regId === regId);
+    
+    if (existingAccount) {
+        alert('Registration ID already exists. Please use a different ID.');
+        return;
+    }
+    
+    const newAccount = {
+        regId,
+        name,
+        district,
+        state,
+        mobile,
+        date,
+        amount: parseFloat(amount),
+        balance: parseFloat(amount),
+        transactions: [{
+            date: new Date().toISOString().split('T')[0],
+            description: 'Initial Investment',
+            debit: 0,
+            credit: parseFloat(amount),
+            balance: parseFloat(amount)
+        }]
+    };
+    
+    accounts.push(newAccount);
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    
+    // Show loading message
+    const submitBtn = document.getElementById('submit-btn');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Saving to Google Sheets...';
+    submitBtn.disabled = true;
+    
+    // Try to save to Google Sheets
+    try {
+        const savedToGoogleSheets = await saveDataToGoogleSheets(accounts);
+        
+        if (savedToGoogleSheets) {
+            alert('✅ Investment added successfully! Data saved to Google Sheets.');
+        } else {
+            alert('⚠️ Investment added locally! But could not sync with Google Sheets. Data saved in browser storage.');
+        }
+    } catch (error) {
+        alert('⚠️ Investment added locally! Error connecting to Google Sheets. Data saved in browser storage.');
+    }
+    
+    // Increment registration counter
+    registrationCounter++;
+    localStorage.setItem('registrationCounter', registrationCounter);
+    
+    // Reset form and generate new registration ID
+    this.reset();
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    generateRegistrationId();
+    
+    // Restore button state
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+});
+
+// Generate Registration ID
+function generateRegistrationId() {
+    const randomPart = Math.random().toString().substring(2, 7); // 5 random digits
+    const sequentialPart = String(registrationCounter).padStart(3, '0'); // 3 sequential digits
+    const regId = randomPart + sequentialPart;
+    document.getElementById('reg-id').value = regId;
+}
+
+// Page load event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... आपका existing animation code ...
+    
+    // Show animation for 3 seconds, then show main content
+    setTimeout(function() {
+        document.getElementById('animation-container').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        
+        // Generate registration ID
+        generateRegistrationId();
+        
+        // Populate weekly progress table
+        populateProgressTable();
+        
+        // Set today's date as default
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+        document.getElementById('calc-date').value = today;
+        document.getElementById('withdrawal-date').value = today;
+        
+        // Load data from Google Sheets when page loads
+        loadDataFromGoogleSheets().then(success => {
+            if (!success) {
+                console.log('Using local storage data');
+            }
+        });
+    }, 3000);
+});
+        
+        // Language toggle functionality
+        document.getElementById('language-toggle').addEventListener('click', function() {
+            const isEnglish = this.textContent === 'Switch to हिंदी';
+            
+            if (isEnglish) {
+                // Switch to Hindi
+                this.textContent = 'Switch to English';
+                document.getElementById('objective-title').textContent = '🎯 उद्देश्य';
+                document.getElementById('objective-text').textContent = 'आपका निवेश सिर्फ 65 दिनों में लाभ के साथ वापस आ जाएगा — मतलब आपकी राशि दोगुनी हो जाएगी (निवेश + लाभ)। यह एक ट्रेडिंग-आधारित प्लेटफॉर्म है जो पूरी पारदर्शिता के साथ संचालित होता है।';
+                document.getElementById('registration-title').textContent = '📝 पंजीकरण फॉर्म';
+                document.getElementById('reg-id-label').textContent = 'पंजीकरण आईडी:';
+                document.getElementById('name-label').textContent = 'नाम:';
+                document.getElementById('district-label').textContent = 'जिला:';
+                document.getElementById('state-label').textContent = 'राज्य:';
+                document.getElementById('mobile-label').textContent = 'मोबाइल नंबर:';
+                document.getElementById('date-label').textContent = 'निवेश तिथि:';
+                document.getElementById('amount-label').textContent = 'निवेश राशि ($):';
+                document.getElementById('balance-label').textContent = 'शेष राशि:';
+                document.getElementById('submit-btn').textContent = 'निवेश जोड़ें';
+                document.getElementById('view-summary').textContent = 'निवेश सारांश देखें';
+                document.getElementById('investment-title').textContent = '💵 निवेश विकल्प';
+                document.getElementById('investment-text').textContent = 'आप निवेश के लिए कोई भी विकल्प चुन सकते हैं —';
+                document.getElementById('option1-text').textContent = '→ 65 दिनों के बाद $100 वापसी';
+                document.getElementById('option2-text').textContent = '→ 65 दिनों के बाद $210 वापसी';
+                document.getElementById('option3-text').textContent = '→ 65 दिनों में दोगुनी वापसी';
+                document.getElementById('growth-title').textContent = '📈 विकास दर';
+                document.getElementById('growth-text').textContent = 'दैनिक वृद्धि: प्रतिदिन लगभग 1.072%\nसाप्ताहिक औसत रिटर्न: प्रति सप्ताह लगभग 7.75%\n👉 इस दर से, कुल रिटर्न 65 दिनों में लगभग 100% हो जाता है।';
+                document.getElementById('progress-title').textContent = '📅 साप्ताहिक प्रगति उदाहरण';
+                document.getElementById('week-header').textContent = 'सप्ताह';
+                document.getElementById('duration-header').textContent = 'अवधि (दिन)';
+                document.getElementById('return-header').textContent = 'औसत साप्ताहिक रिटर्न';
+                document.getElementById('balance50-header').textContent = '$50 पर शेष राशि';
+                document.getElementById('balance105-header').textContent = '$105 पर शेष राशि';
+                document.getElementById('result-title').textContent = '🔢 अंतिम परिणाम';
+                document.getElementById('result-text').textContent = '✅ यदि आप $50 का निवेश करते हैं → आपको 65 दिनों के बाद $100 मिलेंगे।\n✅ यदि आप $105 का निवेश करते हैं → आपको 65 दिनों के बाद $210 मिलेंगे।';
+                document.getElementById('summary-title').textContent = '📊 सारांश';
+                document.getElementById('summary-text').textContent = 'यह परियोजना दर्शाती है कि यदि आप केवल एक बार $50 या $105 का निवेश करते हैं, और वृद्धि औसतन 1.072% प्रतिदिन की दर से होती है, तो 65वें दिन तक आपकी राशि पूरी तरह से दोगुनी हो जाएगी। लगभग 7.75% प्रति सप्ताह की स्थिर वृद्धि दर के साथ, आपका निवेश लगातार बढ़ता रहेगा।';
+                document.getElementById('disclaimer-title').textContent = '⚠️ महत्वपूर्ण अस्वीकरण';
+                document.getElementById('disclaimer-text').textContent = '1️⃣ आप निवेश के 48 से 72 घंटे बाद कभी भी अपना पैसा निकाल सकते हैं।\n2️⃣ इस परियोजना में केवल 100 निवेशक शामिल किए जाएंगे — 65 दिनों तक कोई नया पंजीकरण नहीं।\n3️⃣ "65 दिवसीय परियोजना" दुनिया की सबसे बड़ी और सबसे अधिक रिटर्न देने वाली वास्तविक ट्रेडिंग परियोजना बन रही है।\n4️⃣ इसका उद्देश्य यह साबित करना है कि कैसे एक अनुभवी व्यापारी बाजार की अस्थिरता के बावजूद व्यवस्थित रणनीति और तकनीकी विश्लेषण के माध्यम से लगातार लाभ कमा सकता है।\n5️⃣ प्रारंभिक 65 दिन परीक्षण चरण होंगे।';
+                document.getElementById('message-title').textContent = '🌟 विशेष संदेश';
+                document.getElementById('message-text').textContent = 'यह परियोजना सिर्फ एक निवेश नहीं है — बल्कि यह सीखने और समझने का एक अवसर है कि कैसे एक पेशेवर व्यापारी बाजार की अस्थिरता के बावजूद स्थिर लाभ कमा सकता है।';
+                document.getElementById('rules-title').textContent = '📜 नियम और शर्तें';
+                document.getElementById('rules-text').textContent = '1️⃣ प्रत्येक निकासी पर $2 का लेन-देन शुल्क लागू होगा।\n2️⃣ आप निवेश के 10 दिन बाद निकासी के लिए आवेदन कर सकते हैं।';
+                document.getElementById('bonus-title').textContent = '🎁 विशेष बोनस';
+                document.getElementById('bonus-text').textContent = 'यदि कोई निवेशक धारक $50 के 20 पंजीकरण या $100 के 10 पंजीकरण पूरे करता है, तो उन्हें उपहार के रूप में प्रति माह $50 बोनस दिया जाएगा।';
+                document.getElementById('contact-title').textContent = '🙏 आपका विश्वासी,';
+                document.getElementById('contact-text').textContent = 'डॉ. गोविंद सिंह चंद्रावत\n📲 मोबाइल/व्हाट्सएप नंबर: 8269525270\nपरियोजना सुदर्शन';
+                document.getElementById('warning-title').textContent = '⚠️ विशेष चेतावनी:';
+                document.getElementById('warning-text').textContent = 'निवेशकों को कोई भी निवेश निर्णय लेने से पहले अपने वित्तीय सलाहकार से परामर्श करना चाहिए। उनकी सलाह के बाद ही ट्रेडिंग या क्रिप्टोकरेंसी में निवेश करें।';
+                document.getElementById('modal-title').textContent = 'निवेश सारांश';
+                document.getElementById('calculator-title').textContent = 'निवेश कैलकुलेटर';
+                document.getElementById('calc-amount-label').textContent = 'निवेश राशि ($):';
+                document.getElementById('calc-date-label').textContent = 'निवेश तिथि:';
+                document.getElementById('calc-weeks-label').textContent = 'सप्ताह चुनें:';
+                document.getElementById('calculate-btn').textContent = 'लाभ की गणना करें';
+                document.getElementById('result-title').textContent = 'गणना परिणाम';
+                document.getElementById('summary-week').textContent = 'सप्ताह';
+                document.getElementById('summary-date').textContent = 'तिथि';
+                document.getElementById('summary-return').textContent = 'वापसी';
+                document.getElementById('summary-balance').textContent = 'शेष राशि';
+                document.getElementById('manager-title').textContent = 'प्रबंधक डैशबोर्ड';
+                document.getElementById('export-account-statement').textContent = 'एक्सेल में निर्यात करें';
+            } else {
+                // Switch to English
+                this.textContent = 'Switch to हिंदी';
+                document.getElementById('objective-title').textContent = '🎯 Objective';
+                document.getElementById('objective-text').textContent = 'Your investment will return with profit in just 65 days — meaning your amount will double (investment + profit). This is a trading-based platform that operates with complete transparency.';
+                document.getElementById('registration-title').textContent = '📝 Registration Form';
+                document.getElementById('reg-id-label').textContent = 'Registration ID:';
+                document.getElementById('name-label').textContent = 'Name:';
+                document.getElementById('district-label').textContent = 'District:';
+                document.getElementById('state-label').textContent = 'State:';
+                document.getElementById('mobile-label').textContent = 'Mobile Number:';
+                document.getElementById('date-label').textContent = 'Investment Date:';
+                document.getElementById('amount-label').textContent = 'Investment Amount ($):';
+                document.getElementById('balance-label').textContent = 'Balance:';
+                document.getElementById('submit-btn').textContent = 'Add Investment';
+                document.getElementById('view-summary').textContent = 'View Investment Summary';
+                document.getElementById('investment-title').textContent = '💵 Investment Options';
+                document.getElementById('investment-text').textContent = 'You can choose any option for investment —';
+                document.getElementById('option1-text').textContent = '→ $100 return after 65 days';
+                document.getElementById('option2-text').textContent = '→ $210 return after 65 days';
+                document.getElementById('option3-text').textContent = '→ Double return in 65 days';
+                document.getElementById('growth-title').textContent = '📈 Growth Rate';
+                document.getElementById('growth-text').textContent = 'Daily growth: Approximately 1.072% per day\nWeekly average return: Approximately 7.75% per week\n👉 At this rate, the total return becomes approximately 100% in 65 days.';
+                document.getElementById('progress-title').textContent = '📅 Weekly Progress Example';
+                document.getElementById('week-header').textContent = 'Week';
+                document.getElementById('duration-header').textContent = 'Duration (Days)';
+                document.getElementById('return-header').textContent = 'Average Weekly Return';
+                document.getElementById('balance50-header').textContent = 'Balance on $50';
+                document.getElementById('balance105-header').textContent = 'Balance on $105';
+                document.getElementById('result-title').textContent = '🔢 Final Result';
+                document.getElementById('result-text').textContent = '✅ If you invest $50 → You will receive $100 after 65 days.\n✅ If you invest $105 → You will receive $210 after 65 days.';
+                document.getElementById('summary-title').textContent = '📊 Summary';
+                document.getElementById('summary-text').textContent = 'This project shows that if you invest only once $50 or $105, and growth happens at an average rate of 1.072% per day, then by the 65th day your amount will be completely doubled. With a steady growth rate of approximately 7.75% every week, your investment will keep increasing continuously.';
+                document.getElementById('disclaimer-title').textContent = '⚠️ Important Disclaimer';
+                document.getElementById('disclaimer-text').textContent = '1️⃣ You can withdraw your money anytime after 48 to 72 hours of investment.\n2️⃣ Only 100 investors will be included in this project — no new registrations for 65 days.\n3️⃣ "65 Day Project" is becoming the world\'s largest and highest returning real trading project.\n4️⃣ Its purpose is to prove how an experienced trader can earn consistent profit through systematic strategy and technical analysis despite market volatility.\n5️⃣ The initial 65 days will be a trial phase.';
+                document.getElementById('message-title').textContent = '🌟 Special Message';
+                document.getElementById('message-text').textContent = 'This project is not just an investment — rather it\'s an opportunity to learn and understand how a professional trader can earn stable profit despite market volatility.';
+                document.getElementById('rules-title').textContent = '📜 Rules & Conditions';
+                document.getElementById('rules-text').textContent = '1️⃣ A $2 transaction charge will apply on each withdrawal.\n2️⃣ You can apply for withdrawal 10 days after investment.';
+                document.getElementById('bonus-title').textContent = '🎁 Special Bonus';
+                document.getElementById('bonus-text').textContent = 'If an investor holder completes 20 registrations of $50 or 10 registrations of $100, then they will be given $50 bonus per month as a gift.';
+                document.getElementById('contact-title').textContent = '🙏 Yours Truly,';
+                document.getElementById('contact-text').textContent = 'Dr. Govind Singh Chandraawat\n📲 Mobile/WhatsApp Number: 8269525270\nProject Sudarshan';
+                document.getElementById('warning-title').textContent = '⚠️ Special Warning:';
+                document.getElementById('warning-text').textContent = 'Investors should consult their financial advisor before making any investment decisions. Invest in trading or cryptocurrency only after their advice.';
+                document.getElementById('modal-title').textContent = 'Investment Summary';
+                document.getElementById('calculator-title').textContent = 'Investment Calculator';
+                document.getElementById('calc-amount-label').textContent = 'Investment Amount ($):';
+                document.getElementById('calc-date-label').textContent = 'Investment Date:';
+                document.getElementById('calc-weeks-label').textContent = 'Select Week:';
+                document.getElementById('calculate-btn').textContent = 'Calculate Profit';
+                document.getElementById('result-title').textContent = 'Calculation Result';
+                document.getElementById('summary-week').textContent = 'Week';
+                document.getElementById('summary-date').textContent = 'Date';
+                document.getElementById('summary-return').textContent = 'Return';
+                document.getElementById('summary-balance').textContent = 'Balance';
+                document.getElementById('manager-title').textContent = 'Manager Dashboard';
+                document.getElementById('export-account-statement').textContent = 'Export to Excel';
+            }
+        });
+
+        // Animation - UPDATED with faster bubbles
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating shapes - FASTER animation
+            const shapesContainer = document.querySelector('.floating-shapes-container');
+            const lightColors = ['#ffb8b8', '#ffd8a8', '#a8d8ff', '#b8ffb8', '#e8b8ff'];
+            
+            for (let i = 0; i < 25; i++) {
+                const shape = document.createElement('div');
+                shape.classList.add('floating-shape');
+                
+                // Random properties for faster animation
+                const size = Math.random() * 40 + 10;
+                const color = lightColors[Math.floor(Math.random() * lightColors.length)];
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5; // Shorter delay
+                const duration = Math.random() * 8 + 4; // Faster animation (4-12 seconds)
+                
+                shape.style.width = size + 'px';
+                shape.style.height = size + 'px';
+                shape.style.backgroundColor = color;
+                shape.style.left = left + 'vw';
+                shape.style.animationDelay = delay + 's';
+                shape.style.animationDuration = duration + 's';
+                
+                shapesContainer.appendChild(shape);
+            }
+            
+            // Show animation for 3 seconds, then show main content
+            setTimeout(function() {
+                document.getElementById('animation-container').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            }, 3000);
+            
+            // Generate registration ID
+            generateRegistrationId();
+            
+            // Populate weekly progress table
+            populateProgressTable();
+            
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            document.getElementById('calc-date').value = today;
+            document.getElementById('withdrawal-date').value = today;
+            
+            // Load data from Google Sheets when page loads
+            loadDataFromGoogleSheets();
+        });
+
+        // Generate a registration ID with first 5 random digits and sequential last 3 digits
+        function generateRegistrationId() {
+            const randomPart = Math.random().toString().substring(2, 7); // 5 random digits
+            const sequentialPart = String(registrationCounter).padStart(3, '0'); // 3 sequential digits
+            const regId = randomPart + sequentialPart;
+            document.getElementById('reg-id').value = regId;
+        }
+
+        // Populate weekly progress table
+        function populateProgressTable() {
+            const tableBody = document.getElementById('progress-table');
+            const weeklyReturn = 7.75; // 7.75% weekly return
+            
+            for (let week = 1; week <= 10; week++) {
+                const row = document.createElement('tr');
+                
+                const days = week * 7;
+                const balance50 = (50 * Math.pow(1 + weeklyReturn/100, week)).toFixed(2);
+                const balance105 = (105 * Math.pow(1 + weeklyReturn/100, week)).toFixed(2);
+                
+                row.innerHTML = `
+                    <td>${week}</td>
+                    <td>${days}</td>
+                    <td>${weeklyReturn}%</td>
+                    <td>$${balance50}</td>
+                    <td>$${balance105}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Load data from Google Sheets
+        async function loadDataFromGoogleSheets() {
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store data in localStorage for offline use
+                    localStorage.setItem('accounts', JSON.stringify(data.accounts));
+                    
+                    // Update registration counter
+                    if (data.accounts.length > 0) {
+                        registrationCounter = data.accounts.length + 1;
+                        localStorage.setItem('registrationCounter', registrationCounter);
+                    }
+                    
+                    console.log('Data loaded from Google Sheets');
+                } else {
+                    console.error('Error loading data from Google Sheets');
+                    // Fallback to localStorage if Google Sheets fails
+                    loadDataFromLocalStorage();
+                }
+            } catch (error) {
+                console.error('Error connecting to Google Sheets:', error);
+                // Fallback to localStorage if Google Sheets fails
+                loadDataFromLocalStorage();
+            }
+        }
+
+        // Load data from localStorage (fallback)
+        function loadDataFromLocalStorage() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            console.log('Data loaded from localStorage');
+        }
+
+        // Save data to Google Sheets
+        async function saveDataToGoogleSheets(accounts) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveData',
+                        accounts: accounts
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('Data saved to Google Sheets');
+                    return true;
+                } else {
+                    console.error('Error saving data to Google Sheets');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error connecting to Google Sheets:', error);
+                return false;
+            }
+        }
+
+        // Registration form submission
+        document.getElementById('registration-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const regId = document.getElementById('reg-id').value;
+            const name = document.getElementById('name').value;
+            const district = document.getElementById('district').value;
+            const state = document.getElementById('state').value;
+            const mobile = document.getElementById('mobile').value;
+            const date = document.getElementById('date').value;
+            const amount = document.getElementById('amount').value;
+            
+            // Save to localStorage
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const existingAccount = accounts.find(acc => acc.regId === regId);
+            
+            if (existingAccount) {
+                alert('Registration ID already exists. Please use a different ID.');
+                return;
+            }
+            
+            const newAccount = {
+                regId,
+                name,
+                district,
+                state,
+                mobile,
+                date,
+                amount: parseFloat(amount),
+                balance: parseFloat(amount),
+                transactions: [{
+                    date: new Date().toISOString().split('T')[0],
+                    description: 'Initial Investment',
+                    debit: 0,
+                    credit: parseFloat(amount),
+                    balance: parseFloat(amount)
+                }]
+            };
+            
+            accounts.push(newAccount);
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            
+            // Try to save to Google Sheets
+            const savedToGoogleSheets = await saveDataToGoogleSheets(accounts);
+            
+            if (!savedToGoogleSheets) {
+                console.warn('Data saved locally but could not sync with Google Sheets');
+            }
+            
+            // Increment registration counter
+            registrationCounter++;
+            localStorage.setItem('registrationCounter', registrationCounter);
+            
+            alert('Investment added successfully!');
+            
+            // Reset form and generate new registration ID
+            this.reset();
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            generateRegistrationId();
+        });
+
+        // View Investment Summary
+        document.getElementById('view-summary').addEventListener('click', function() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const accountList = document.getElementById('account-list');
+            accountList.innerHTML = '';
+            
+            if (accounts.length === 0) {
+                accountList.innerHTML = '<tr><td colspan="12" style="text-align: center;">No investments found</td></tr>';
+            } else {
+                accounts.forEach((account, index) => {
+                    // Calculate profit till date
+                    const investmentDate = new Date(account.date);
+                    const today = new Date();
+                    const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+                    const dailyGrowthRate = 1.072; // 1.072% per day
+                    const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+                    
+                    // Calculate total withdrawals
+                    const totalWithdrawals = account.transactions
+                        .filter(t => t.description === 'Withdrawal')
+                        .reduce((sum, t) => sum + t.debit, 0);
+                    
+                    // Calculate balance with profit and withdrawals
+                    const balanceWithProfit = account.amount + profit - totalWithdrawals;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="serial-no">${index + 1}</td>
+                        <td>${account.regId}</td>
+                        <td>${account.name}</td>
+                        <td>${account.district}</td>
+                        <td>${account.state}</td>
+                        <td>${formatMobileNumber(account.mobile)}</td>
+                        <td>${account.date}</td>
+                        <td>$${account.amount.toFixed(2)}</td>
+                        <td>$${profit.toFixed(2)}</td>
+                        <td>$${totalWithdrawals.toFixed(2)}</td>
+                        <td>$${balanceWithProfit.toFixed(2)}</td>
+                        <td><button class="view-account-btn" data-regid="${account.regId}">View Account</button></td>
+                    `;
+                    accountList.appendChild(row);
+                });
+                
+                // Add event listeners to view account buttons
+                document.querySelectorAll('.view-account-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const regId = this.getAttribute('data-regid');
+                        viewAccountDetails(regId);
+                    });
+                });
+            }
+            
+            document.getElementById('summary-modal').style.display = 'flex';
+        });
+
+        // Format mobile number to show only last 4 digits with X's
+        function formatMobileNumber(mobile) {
+            if (mobile.length <= 4) return mobile;
+            return 'X'.repeat(mobile.length - 4) + mobile.slice(-4);
+        }
+
+        // View account details
+        function viewAccountDetails(regId) {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(acc => acc.regId === regId);
+            
+            if (!account) {
+                alert('Account not found!');
+                return;
+            }
+            
+            const accountDetails = document.getElementById('account-details');
+            const transactionTable = document.getElementById('account-transaction-table');
+            
+            // Calculate profit till date
+            const investmentDate = new Date(account.date);
+            const today = new Date();
+            const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+            const dailyGrowthRate = 1.072; // 1.072% per day
+            const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+            
+            // Calculate total withdrawals
+            const totalWithdrawals = account.transactions
+                .filter(t => t.description === 'Withdrawal')
+                .reduce((sum, t) => sum + t.debit, 0);
+            
+            // Calculate balance with profit and withdrawals
+            const balanceWithProfit = account.amount + profit - totalWithdrawals;
+            
+            accountDetails.innerHTML = `
+                <div class="account-details">
+                    <div class="account-header">
+                        <span><strong>Registration ID:</strong> ${account.regId}</span>
+                        <span><strong>Name:</strong> ${account.name}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Mobile:</strong> ${account.mobile}</span>
+                        <span><strong>Investment Date:</strong> ${account.date}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Investment Amount:</strong> $${account.amount.toFixed(2)}</span>
+                        <span><strong>Current Balance:</strong> $${balanceWithProfit.toFixed(2)}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Profit Till Date:</strong> $${profit.toFixed(2)}</span>
+                        <span><strong>Total Withdrawals:</strong> $${totalWithdrawals.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Populate transaction table
+            transactionTable.innerHTML = '';
+            
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            // Add initial investment transaction
+            const initialRow = document.createElement('tr');
+            initialRow.innerHTML = `
+                <td>${account.date}</td>
+                <td>Initial Investment</td>
+                <td></td>
+                <td class="credit">$${account.amount.toFixed(2)}</td>
+                <td>$${account.amount.toFixed(2)}</td>
+            `;
+            transactionTable.appendChild(initialRow);
+            totalCredit += account.amount;
+            
+            // Add daily profit transactions
+            let runningBalance = account.amount;
+            for (let i = 1; i <= daysSinceInvestment; i++) {
+                const currentDate = new Date(investmentDate);
+                currentDate.setDate(currentDate.getDate() + i);
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                
+                const dailyProfit = runningBalance * (dailyGrowthRate / 100);
+                runningBalance += dailyProfit;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>Daily Profit (Day ${i})</td>
+                    <td></td>
+                    <td class="credit">$${dailyProfit.toFixed(2)}</td>
+                    <td>$${runningBalance.toFixed(2)}</td>
+                `;
+                transactionTable.appendChild(row);
+                totalCredit += dailyProfit;
+            }
+            
+            // Add withdrawal transactions if any
+            account.transactions.forEach(transaction => {
+                if (transaction.description === 'Withdrawal') {
+                    runningBalance -= transaction.debit;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${transaction.date}</td>
+                        <td>${transaction.description}</td>
+                        <td class="debit">$${transaction.debit.toFixed(2)}</td>
+                        <td></td>
+                        <td>$${runningBalance.toFixed(2)}</td>
+                    `;
+                    transactionTable.appendChild(row);
+                    totalDebit += transaction.debit;
+                }
+            });
+            
+            // Update transaction totals
+            document.getElementById('account-transaction-total').innerHTML = `
+                <p>Total Debit: $${totalDebit.toFixed(2)} | Total Credit: $${totalCredit.toFixed(2)} | Final Balance: $${runningBalance.toFixed(2)}</p>
+            `;
+            
+            document.getElementById('summary-modal').style.display = 'none';
+            document.getElementById('account-modal').style.display = 'flex';
+        }
+
+        // Close modals
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('summary-modal').style.display = 'none';
+        });
+        
+        document.getElementById('close-account-modal').addEventListener('click', function() {
+            document.getElementById('account-modal').style.display = 'none';
+        });
+        
+        document.getElementById('close-calculator').addEventListener('click', function() {
+            document.getElementById('calculator-modal').style.display = 'none';
+        });
+        
+        document.getElementById('close-manager').addEventListener('click', function() {
+            document.getElementById('manager-modal').style.display = 'none';
+        });
+
+        // Calculator functionality
+        document.getElementById('calculator-btn').addEventListener('click', function() {
+            document.getElementById('calculator-modal').style.display = 'flex';
+        });
+        
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('calc-amount').value);
+            const date = document.getElementById('calc-date').value;
+            const weeks = document.getElementById('calc-weeks').value;
+            
+            if (!amount || !date || !weeks) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            const weeklyReturn = 7.75; // 7.75% weekly return
+            let totalReturn = 0;
+            let finalBalance = amount;
+            const tableBody = document.getElementById('summary-table-body');
+            tableBody.innerHTML = '';
+            
+            const investmentDate = new Date(date);
+            
+            if (weeks === '65') {
+                // Calculate for 65 days
+                const dailyGrowthRate = 1.072; // 1.072% per day
+                finalBalance = amount * 2; // Double the amount
+                totalReturn = finalBalance - amount;
+                
+                // Add rows for each week
+                let runningBalance = amount;
+                for (let week = 1; week <= 9; week++) {
+                    const weekDate = new Date(investmentDate);
+                    weekDate.setDate(weekDate.getDate() + (week * 7));
+                    const formattedDate = weekDate.toISOString().split('T')[0];
+                    
+                    const weeklyProfit = runningBalance * (weeklyReturn / 100);
+                    runningBalance += weeklyProfit;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${week}</td>
+                        <td>${formattedDate}</td>
+                        <td>$${weeklyProfit.toFixed(2)}</td>
+                        <td>$${runningBalance.toFixed(2)}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+                
+                // Add final row for day 65
+                const finalDate = new Date(investmentDate);
+                finalDate.setDate(finalDate.getDate() + 65);
+                const finalFormattedDate = finalDate.toISOString().split('T')[0];
+                
+                const finalProfit = finalBalance - runningBalance;
+                
+                const finalRow = document.createElement('tr');
+                finalRow.innerHTML = `
+                    <td>10</td>
+                    <td>${finalFormattedDate}</td>
+                    <td>$${finalProfit.toFixed(2)}</td>
+                    <td>$${finalBalance.toFixed(2)}</td>
+                `;
+                tableBody.appendChild(finalRow);
+            } else {
+                // Calculate for selected week
+                const selectedWeek = parseInt(weeks);
+                finalBalance = amount * Math.pow(1 + weeklyReturn/100, selectedWeek);
+                totalReturn = finalBalance - amount;
+                
+                // Add rows for each week up to selected week
+                let runningBalance = amount;
+                for (let week = 1; week <= selectedWeek; week++) {
+                    const weekDate = new Date(investmentDate);
+                    weekDate.setDate(weekDate.getDate() + (week * 7));
+                    const formattedDate = weekDate.toISOString().split('T')[0];
+                    
+                    const weeklyProfit = runningBalance * (weeklyReturn / 100);
+                    runningBalance += weeklyProfit;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${week}</td>
+                        <td>${formattedDate}</td>
+                        <td>$${weeklyProfit.toFixed(2)}</td>
+                        <td>$${runningBalance.toFixed(2)}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+            
+            // Display result
+            document.getElementById('result-details').innerHTML = `
+                <p><strong>Investment Amount:</strong> $${amount.toFixed(2)}</p>
+                <p><strong>Total Return:</strong> $${totalReturn.toFixed(2)}</p>
+                <p><strong>Final Balance:</strong> $${finalBalance.toFixed(2)}</p>
+            `;
+            
+            document.getElementById('calculator-result').style.display = 'block';
+        });
+
+        // Manager functionality
+        document.getElementById('manager-btn').addEventListener('click', function() {
+            document.getElementById('manager-modal').style.display = 'flex';
+        });
+        
+        document.getElementById('manager-login').addEventListener('click', function() {
+            const password = document.getElementById('manager-password').value;
+            
+            // Simple password check (you should implement a more secure method)
+            if (password === 'admin123') {
+                document.getElementById('password-form').style.display = 'none';
+                document.getElementById('manager-actions').style.display = 'block';
+                updateManagerSummary();
+                loadManagerAccounts();
+            } else {
+                alert('Incorrect password!');
+            }
+        });
+        
+        // Update manager summary
+        function updateManagerSummary() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            
+            let totalInvestment = 0;
+            let totalProfit = 0;
+            let totalWithdrawal = 0;
+            
+            accounts.forEach(account => {
+                totalInvestment += account.amount;
+                
+                // Calculate profit till date
+                const investmentDate = new Date(account.date);
+                const today = new Date();
+                const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+                const dailyGrowthRate = 1.072; // 1.072% per day
+                const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+                totalProfit += profit;
+                
+                // Calculate total withdrawals
+                const withdrawals = account.transactions
+                    .filter(t => t.description === 'Withdrawal')
+                    .reduce((sum, t) => sum + t.debit, 0);
+                totalWithdrawal += withdrawals;
+            });
+            
+            const totalBalance = totalInvestment + totalProfit - totalWithdrawal;
+            
+            document.getElementById('total-investment').textContent = `$${totalInvestment.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+            document.getElementById('total-balance').textContent = `$${totalBalance.toFixed(2)}`;
+            document.getElementById('total-withdrawal').textContent = `$${totalWithdrawal.toFixed(2)}`;
+            document.getElementById('total-registrations').textContent = accounts.length;
+        }
+        
+        // Load accounts in manager dashboard - UPDATED with View Account option
+        function loadManagerAccounts() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const accountList = document.getElementById('manager-account-list');
+            accountList.innerHTML = '';
+            
+            if (accounts.length === 0) {
+                accountList.innerHTML = '<tr><td colspan="8" style="text-align: center;">No investments found</td></tr>';
+            } else {
+                accounts.forEach((account, index) => {
+                    // Calculate profit till date
+                    const investmentDate = new Date(account.date);
+                    const today = new Date();
+                    const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+                    const dailyGrowthRate = 1.072; // 1.072% per day
+                    const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+                    
+                    // Calculate total withdrawals
+                    const totalWithdrawals = account.transactions
+                        .filter(t => t.description === 'Withdrawal')
+                        .reduce((sum, t) => sum + t.debit, 0);
+                    
+                    // Calculate balance with profit and withdrawals
+                    const balanceWithProfit = account.amount + profit - totalWithdrawals;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="serial-no">${index + 1}</td>
+                        <td>${account.regId}</td>
+                        <td>${account.name}</td>
+                        <td>${account.mobile}</td>
+                        <td>${account.date}</td>
+                        <td>$${account.amount.toFixed(2)}</td>
+                        <td>$${balanceWithProfit.toFixed(2)}</td>
+                        <td>
+                            <button class="view-account-btn" data-regid="${account.regId}">View</button>
+                            <button class="withdrawal-btn" data-regid="${account.regId}">Withdrawal</button>
+                            <button class="delete-btn" data-regid="${account.regId}">Delete</button>
+                        </td>
+                    `;
+                    accountList.appendChild(row);
+                });
+                
+                // Add event listeners to view account buttons
+                document.querySelectorAll('.view-account-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const regId = this.getAttribute('data-regid');
+                        viewAccountInManager(regId);
+                    });
+                });
+                
+                // Add event listeners to withdrawal buttons
+                document.querySelectorAll('.withdrawal-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const regId = this.getAttribute('data-regid');
+                        document.getElementById('withdrawal-reg-id').value = regId;
+                        viewAccountInManager(regId);
+                    });
+                });
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const regId = this.getAttribute('data-regid');
+                        if (confirm(`Are you sure you want to delete account ${regId}? This action cannot be undone.`)) {
+                            deleteAccount(regId);
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Delete account function
+        function deleteAccount(regId) {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const updatedAccounts = accounts.filter(account => account.regId !== regId);
+            
+            localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
+            
+            // Try to save to Google Sheets
+            saveDataToGoogleSheets(updatedAccounts);
+            
+            alert('Account deleted successfully!');
+            loadManagerAccounts();
+            updateManagerSummary();
+        }
+        
+        // View account in manager
+        function viewAccountInManager(regId) {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(acc => acc.regId === regId);
+            
+            if (!account) {
+                alert('Account not found!');
+                return;
+            }
+            
+            const accountDetails = document.getElementById('account-details-manager');
+            const transactionTable = document.getElementById('transaction-table-body');
+            
+            // Calculate profit till date
+            const investmentDate = new Date(account.date);
+            const today = new Date();
+            const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+            const dailyGrowthRate = 1.072; // 1.072% per day
+            const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+            
+            // Calculate total withdrawals
+            const totalWithdrawals = account.transactions
+                .filter(t => t.description === 'Withdrawal')
+                .reduce((sum, t) => sum + t.debit, 0);
+            
+            // Calculate balance with profit and withdrawals
+            const balanceWithProfit = account.amount + profit - totalWithdrawals;
+            
+            accountDetails.innerHTML = `
+                <div class="account-details">
+                    <div class="account-header">
+                        <span><strong>Registration ID:</strong> ${account.regId}</span>
+                        <span><strong>Name:</strong> ${account.name}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Mobile:</strong> ${account.mobile}</span>
+                        <span><strong>Investment Date:</strong> ${account.date}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Investment Amount:</strong> $${account.amount.toFixed(2)}</span>
+                        <span><strong>Current Balance:</strong> $${balanceWithProfit.toFixed(2)}</span>
+                    </div>
+                    <div class="account-header">
+                        <span><strong>Profit Till Date:</strong> $${profit.toFixed(2)}</span>
+                        <span><strong>Total Withdrawals:</strong> $${totalWithdrawals.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Populate transaction table
+            transactionTable.innerHTML = '';
+            
+            let totalDebit = 0;
+            let totalCredit = 0;
+            let runningBalance = account.amount;
+            
+            // Add initial investment transaction
+            const initialRow = document.createElement('tr');
+            initialRow.innerHTML = `
+                <td>${account.date}</td>
+                <td>Initial Investment</td>
+                <td></td>
+                <td class="credit">$${account.amount.toFixed(2)}</td>
+                <td>$${account.amount.toFixed(2)}</td>
+            `;
+            transactionTable.appendChild(initialRow);
+            totalCredit += account.amount;
+            
+            // Add daily profit transactions
+            for (let i = 1; i <= daysSinceInvestment; i++) {
+                const currentDate = new Date(investmentDate);
+                currentDate.setDate(currentDate.getDate() + i);
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                
+                const dailyProfit = runningBalance * (dailyGrowthRate / 100);
+                runningBalance += dailyProfit;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>Daily Profit (Day ${i})</td>
+                    <td></td>
+                    <td class="credit">$${dailyProfit.toFixed(2)}</td>
+                    <td>$${runningBalance.toFixed(2)}</td>
+                `;
+                transactionTable.appendChild(row);
+                totalCredit += dailyProfit;
+            }
+            
+            // Add withdrawal transactions if any
+            account.transactions.forEach(transaction => {
+                if (transaction.description === 'Withdrawal') {
+                    runningBalance -= transaction.debit;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${transaction.date}</td>
+                        <td>${transaction.description}</td>
+                        <td class="debit">$${transaction.debit.toFixed(2)}</td>
+                        <td></td>
+                        <td>$${runningBalance.toFixed(2)}</td>
+                    `;
+                    transactionTable.appendChild(row);
+                    totalDebit += transaction.debit;
+                }
+            });
+            
+            // Update transaction totals
+            document.getElementById('transaction-total').innerHTML = `
+                <p>Total Debit: $${totalDebit.toFixed(2)} | Total Credit: $${totalCredit.toFixed(2)} | Final Balance: $${runningBalance.toFixed(2)}</p>
+            `;
+            
+            document.getElementById('withdrawal-section').style.display = 'block';
+        }
+        
+        // Search account in manager
+        document.getElementById('search-account').addEventListener('click', function() {
+            const regId = document.getElementById('withdrawal-reg-id').value;
+            
+            if (!regId) {
+                alert('Please enter a Registration ID');
+                return;
+            }
+            
+            viewAccountInManager(regId);
+        });
+        
+        // Process withdrawal
+        document.getElementById('process-withdrawal').addEventListener('click', function() {
+            const regId = document.getElementById('withdrawal-reg-id').value;
+            const amount = parseFloat(document.getElementById('withdrawal-amount').value);
+            const withdrawalDate = document.getElementById('withdrawal-date').value;
+            
+            if (!regId || !amount || !withdrawalDate) {
+                alert('Please enter Registration ID, withdrawal amount and withdrawal date');
+                return;
+            }
+            
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const accountIndex = accounts.findIndex(acc => acc.regId === regId);
+            
+            if (accountIndex === -1) {
+                alert('Account not found!');
+                return;
+            }
+            
+            const account = accounts[accountIndex];
+            
+            // Calculate current balance
+            const investmentDate = new Date(account.date);
+            const today = new Date();
+            const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+            const dailyGrowthRate = 1.072; // 1.072% per day
+            const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+            
+            // Calculate total withdrawals
+            const totalWithdrawals = account.transactions
+                .filter(t => t.description === 'Withdrawal')
+                .reduce((sum, t) => sum + t.debit, 0);
+            
+            // Calculate current balance
+            const currentBalance = account.amount + profit - totalWithdrawals;
+            
+            if (amount > currentBalance) {
+                alert('Withdrawal amount exceeds available balance!');
+                return;
+            }
+            
+            // Add withdrawal transaction with specified date
+            const transaction = {
+                date: withdrawalDate,
+                description: 'Withdrawal',
+                debit: amount,
+                credit: 0,
+                balance: currentBalance - amount
+            };
+            
+            accounts[accountIndex].transactions.push(transaction);
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            
+            // Try to save to Google Sheets
+            saveDataToGoogleSheets(accounts);
+            
+            alert('Withdrawal processed successfully!');
+            
+            // Update display
+            viewAccountInManager(regId);
+            updateManagerSummary();
+            loadManagerAccounts();
+            
+            // Reset withdrawal amount field
+            document.getElementById('withdrawal-amount').value = '';
+        });
+        
+        // Export to Excel
+        document.getElementById('export-excel').addEventListener('click', function() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            
+            if (accounts.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = 'Registration ID,Name,District,State,Mobile,Investment Date,Amount,Balance\n';
+            
+            accounts.forEach(account => {
+                // Calculate current balance
+                const investmentDate = new Date(account.date);
+                const today = new Date();
+                const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+                const dailyGrowthRate = 1.072; // 1.072% per day
+                const profit = account.amount * (Math.pow(1 + dailyGrowthRate/100, daysSinceInvestment) - 1);
+                
+                // Calculate total withdrawals
+                const totalWithdrawals = account.transactions
+                    .filter(t => t.description === 'Withdrawal')
+                    .reduce((sum, t) => sum + t.debit, 0);
+                
+                // Calculate current balance
+                const currentBalance = account.amount + profit - totalWithdrawals;
+                
+                csvContent += `${account.regId},${account.name},${account.district},${account.state},${account.mobile},${account.date},${account.amount},${currentBalance}\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tradedynasty_data.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Data exported successfully!');
+        });
+        
+        // Export transaction statement
+        document.getElementById('export-transaction-excel').addEventListener('click', function() {
+            const regId = document.getElementById('withdrawal-reg-id').value;
+            
+            if (!regId) {
+                alert('Please search for an account first');
+                return;
+            }
+            
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(acc => acc.regId === regId);
+            
+            if (!account) {
+                alert('Account not found!');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = 'Date,Description,Debit,Credit,Balance\n';
+            
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            // Add initial investment
+            csvContent += `${account.date},Initial Investment,,${account.amount},${account.amount}\n`;
+            totalCredit += account.amount;
+            
+            // Calculate daily profits and withdrawals
+            const investmentDate = new Date(account.date);
+            const today = new Date();
+            const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+            const dailyGrowthRate = 1.072; // 1.072% per day
+            
+            let runningBalance = account.amount;
+            
+            // Add daily profit transactions
+            for (let i = 1; i <= daysSinceInvestment; i++) {
+                const currentDate = new Date(investmentDate);
+                currentDate.setDate(currentDate.getDate() + i);
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                
+                const dailyProfit = runningBalance * (dailyGrowthRate / 100);
+                runningBalance += dailyProfit;
+                
+                csvContent += `${formattedDate},Daily Profit (Day ${i}),,${dailyProfit.toFixed(2)},${runningBalance.toFixed(2)}\n`;
+                totalCredit += dailyProfit;
+            }
+            
+            // Add withdrawal transactions
+            account.transactions.forEach(transaction => {
+                if (transaction.description === 'Withdrawal') {
+                    runningBalance -= transaction.debit;
+                    csvContent += `${transaction.date},${transaction.description},${transaction.debit},,${runningBalance.toFixed(2)}\n`;
+                    totalDebit += transaction.debit;
+                }
+            });
+            
+            // Add totals row
+            csvContent += `\nTotal,,${totalDebit.toFixed(2)},${totalCredit.toFixed(2)},${runningBalance.toFixed(2)}\n`;
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tradedynasty_${regId}_statement.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Transaction statement exported successfully!');
+        });
+        
+        // Export account statement
+        document.getElementById('export-account-statement').addEventListener('click', function() {
+            const regId = document.querySelector('#account-details .account-header span:first-child').textContent.split(': ')[1];
+            
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(acc => acc.regId === regId);
+            
+            if (!account) {
+                alert('Account not found!');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = 'Date,Description,Debit,Credit,Balance\n';
+            
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            // Add initial investment
+            csvContent += `${account.date},Initial Investment,,${account.amount},${account.amount}\n`;
+            totalCredit += account.amount;
+            
+            // Calculate daily profits and withdrawals
+            const investmentDate = new Date(account.date);
+            const today = new Date();
+            const daysSinceInvestment = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+            const dailyGrowthRate = 1.072; // 1.072% per day
+            
+            let runningBalance = account.amount;
+            
+            // Add daily profit transactions
+            for (let i = 1; i <= daysSinceInvestment; i++) {
+                const currentDate = new Date(investmentDate);
+                currentDate.setDate(currentDate.getDate() + i);
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                
+                const dailyProfit = runningBalance * (dailyGrowthRate / 100);
+                runningBalance += dailyProfit;
+                
+                csvContent += `${formattedDate},Daily Profit (Day ${i}),,${dailyProfit.toFixed(2)},${runningBalance.toFixed(2)}\n`;
+                totalCredit += dailyProfit;
+            }
+            
+            // Add withdrawal transactions
+            account.transactions.forEach(transaction => {
+                if (transaction.description === 'Withdrawal') {
+                    runningBalance -= transaction.debit;
+                    csvContent += `${transaction.date},${transaction.description},${transaction.debit},,${runningBalance.toFixed(2)}\n`;
+                    totalDebit += transaction.debit;
+                }
+            });
+            
+            // Add totals row
+            csvContent += `\nTotal,,${totalDebit.toFixed(2)},${totalCredit.toFixed(2)},${runningBalance.toFixed(2)}\n`;
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tradedynasty_${regId}_statement.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Account statement exported successfully!');
+        });
+        
+        // Backup data
+        document.getElementById('backup-data').addEventListener('click', function() {
+            const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            
+            if (accounts.length === 0) {
+                alert('No data to backup');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(accounts, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tradedynasty_backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Data backed up successfully!');
+        });
+        
+        // Restore data
+        document.getElementById('restore-data').addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    try {
+                        const accounts = JSON.parse(event.target.result);
+                        localStorage.setItem('accounts', JSON.stringify(accounts));
+                        
+                        // Try to save to Google Sheets
+                        saveDataToGoogleSheets(accounts);
+                        
+                        alert('Data restored successfully!');
+                        updateManagerSummary();
+                        loadManagerAccounts();
+                    } catch (error) {
+                        alert('Error restoring data: Invalid file format');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        });
+        
+        // Delete all data
+        document.getElementById('delete-all').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete all data? This action cannot be undone.')) {
+                localStorage.removeItem('accounts');
+                localStorage.removeItem('registrationCounter');
+                registrationCounter = 1;
+                
+                // Try to delete from Google Sheets
+                saveDataToGoogleSheets([]);
+                
+                alert('All data deleted successfully!');
+                updateManagerSummary();
+                loadManagerAccounts();
+            }
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const summaryModal = document.getElementById('summary-modal');
+            const accountModal = document.getElementById('account-modal');
+            const calculatorModal = document.getElementById('calculator-modal');
+            const managerModal = document.getElementById('manager-modal');
+            
+            if (event.target === summaryModal) {
+                summaryModal.style.display = 'none';
+            }
+            if (event.target === accountModal) {
+                accountModal.style.display = 'none';
+            }
+            if (event.target === calculatorModal) {
+                calculatorModal.style.display = 'none';
+            }
+            if (event.target === managerModal) {
+                managerModal.style.display = 'none';
+            }
+        });
+
+        // Live Market Tabs Functionality - NEW ADDITION
+        const liveMarketTabs = document.querySelectorAll('.live-market-tab');
+        const liveMarketLists = document.querySelectorAll('.live-market-list');
+        const chartFrame = document.getElementById('chartFrame');
+        
+        liveMarketTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                liveMarketTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                liveMarketLists.forEach(list => list.style.display = 'none');
+                document.getElementById(tab.dataset.tab).style.display = 'flex';
+            });
+        });
+        
+        document.querySelectorAll('.live-market-item').forEach(market => {
+            market.addEventListener('click', () => {
+                const symbol = market.dataset.symbol;
+                chartFrame.src = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=${symbol}&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=0D1117&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1&show_popup_button=1`;
+            });
+        });
+    </script>
+</body>
+</html>
